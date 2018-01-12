@@ -22,6 +22,13 @@ type Engine struct {
 	mu             sync.RWMutex
 }
 
+func NewEngine(tokenizer Tokenizer) *Engine {
+	return &Engine{
+		tokenizer:      tokenizer,
+		transposeIndex: map[string][]Posting{},
+	}
+}
+
 func (e *Engine) AddDocument(indexer Indexer) int {
 	tokens := e.tokenizer.Tokenize(indexer.Index())
 
