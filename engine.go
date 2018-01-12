@@ -45,3 +45,9 @@ func (e *Engine) AddDocument(indexer Indexer) int {
 	}
 	return id
 }
+
+func (e *Engine) SearchOne(query string) []Posting {
+	e.mu.RLock()
+	defer e.mu.RUnlock()
+	return e.transposeIndex[query]
+}
