@@ -11,6 +11,7 @@ type Indexer interface {
 type Posting struct {
 	DocumentID int
 	Offset     int
+	Length     int
 }
 
 type Engine struct {
@@ -41,6 +42,7 @@ func (e *Engine) AddDocument(indexer Indexer) int {
 		e.transposeIndex[token.Text] = append(e.transposeIndex[token.Text], Posting{
 			DocumentID: id,
 			Offset:     token.Offset,
+			Length:     len(token.Text),
 		})
 	}
 	return id

@@ -31,9 +31,9 @@ func TestEngine_SearchOne(t *testing.T) {
 			}),
 			query: "amp",
 			expected: []Posting{
-				{0, 2},
-				{2, 0},
-				{5, 1},
+				{0, 2, 3},
+				{2, 0, 3},
+				{5, 1, 3},
 			},
 		},
 	}
