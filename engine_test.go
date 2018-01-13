@@ -36,6 +36,15 @@ func TestEngine_SearchOne(t *testing.T) {
 				{5, 1, 3},
 			},
 		},
+		{
+			engine: buildEngine(&NgramTokenizer{3}, []string{
+				"example", "日本語", "amplify", "foo", "bar", "campfire",
+			}),
+			query: "日本語",
+			expected: []Posting{
+				{1, 0, len("日本語")},
+			},
+		},
 	}
 
 	for _, test := range tests {
