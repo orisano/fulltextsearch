@@ -79,6 +79,7 @@ func and(a, b []Posting) []Posting {
 			p = append(p, x)
 		}
 	}
+	p = append(p, b...)
 	return p
 }
 
