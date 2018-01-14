@@ -83,3 +83,39 @@ func TestEngine_SearchAnd(t *testing.T) {
 		}
 	}
 }
+
+func TestEngine_SearchOr(t *testing.T) {
+	tests := []struct {
+		engine   *Engine
+		queries  []string
+		expected []Posting
+	}{
+		{
+			engine: buildEngine(&NgramTokenizer{3}, []string{
+				"foo", "a foo bar example amplify", "amplify fool bare", "foo camp", "bar bar", "campfire",
+			}),
+			queries: []string{"foo", "amp", "bar"},
+			expected: []Posting{
+				{0, 0, 3},
+				{1, 2, 3},
+				{1, 6, 3},
+				{1, 12, 3},
+				{1, 18, 3},
+				{2, 0, 3},
+				{2, 8, 3},
+				{2, 13, 3},
+				{3, 0, 3},
+				{3, 5, 3},
+				{4, 0, 3},
+				{4, 4, 3},
+				{5, 1, 3},
+			},
+		},
+	}
+
+	for _, test := range tests {
+		if got := test.engine.SearchOr(test.queries); !reflect.DeepEqual(got, test.expected) {
+			t.Errorf("unexpected posting list. expected: %#v, but got: %#v", test.expected, got)
+		}
+	}
+}

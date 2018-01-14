@@ -96,3 +96,37 @@ func (e *Engine) SearchAnd(queries []string) []Posting {
 	}
 	return r
 }
+
+func merge(a, b []Posting) []Posting {
+	var p []Posting
+
+	for _, x := range a {
+		for len(b) > 0 {
+			docID := b[0].DocumentID
+			if docID > x.DocumentID {
+				break
+			}
+			if docID == x.DocumentID {
+				if b[0].Offset > x.Offset {
+					break
+				}
+			}
+			p = append(p, b[0])
+			b = b[1:]
+		}
+		p = append(p, x)
+	}
+	p = append(p, b...)
+	return p
+}
+
+func (e *Engine) SearchOr(queries []string) []Posting {
+	e.mu.RLock()
+	defer e.mu.RUnlock()
+
+	var p []Posting
+	for _, query := range queries {
+		p = merge(p, e.transposeIndex[query])
+	}
+	return p
+}
